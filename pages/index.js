@@ -1,50 +1,52 @@
-import Link from "next/link";
-import React, { useState, useRef } from "react";
+import Image from 'next/image'
+import Link from 'next/link'
+
+import React, { useState, useRef } from 'react'
 
 export default function Home() {
   const defaultFormData = {
-    apiKey: "",
-    product: "be active program",
-    summary: "10 ways to move more",
+    apiKey: '',
+    product: 'be active program',
+    summary: '10 ways to move more',
     headline: 60,
     body: 200,
     cta: 15,
     versions: 4,
-  };
+  }
 
-  const [formData, setFormData] = useState(defaultFormData);
-  const [result, setResult] = useState([]);
+  const [formData, setFormData] = useState(defaultFormData)
+  const [result, setResult] = useState([])
 
   const handleInput = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
+    const fieldName = e.target.name
+    const fieldValue = e.target.value
 
     setFormData((prevState) => ({
       ...prevState,
       [fieldName]: fieldValue,
-    }));
-  };
+    }))
+  }
 
   const copyToClipboard = (e) => {
-    const copyText = e.target.previousSibling;
-    copyText.select();
-    document.execCommand("copy");
-  };
+    const copyText = e.target.previousSibling
+    copyText.select()
+    document.execCommand('copy')
+  }
 
   const submitForm = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const response = await fetch("/api/ai", {
-      method: "POST",
+    const response = await fetch('/api/ai', {
+      method: 'POST',
       body: JSON.stringify(formData),
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
       },
-    });
+    })
 
-    const result = await response.json();
-    setResult(result);
-  };
+    const result = await response.json()
+    setResult(result)
+  }
 
   return (
     <div className="w-full max-w-lg m-auto">
@@ -69,13 +71,13 @@ export default function Home() {
             value={formData.apiKey}
           />
           <p className="text-red-500 text-xs italic">
-            Enter your{" "}
+            Enter your{' '}
             <Link
               href="https://beta.openai.com/account/api-keys"
               className="text-blue-600 hover:text-blue-800 hover:underline"
             >
               OpenAI Key
-            </Link>{" "}
+            </Link>{' '}
             or use the env file.
           </p>
         </div>
@@ -194,11 +196,18 @@ export default function Home() {
         </div>
       </form>
       <p>
-        {result.map((item, index) => {
+        {result?.variations?.map((item, index) => {
           return (
             <>
               <h2 className="text-lg font-bold">Result {index + 1}</h2>
               <section class="flex flex-col justify-center items-center bg-white max-w-lg p-5 rounded shadow-md">
+                <div class="mb-3 inline-flex w-full">
+                  <Image
+                    width="250"
+                    height="50"
+                    src={result.images[index].url}
+                  />
+                </div>
                 <div class="mb-3 inline-flex w-full">
                   <input
                     class=" w-full flex-grow border-blue-500 border-solid border rounded py-2 px-4"
@@ -221,9 +230,9 @@ export default function Home() {
                     value={item.body}
                     rows={Math.ceil(item.body.length / 50)} // assuming average character width of 8 pixels and max width of 200 pixels
                     onChange={(e) => {
-                      const newResult = [...result];
-                      newResult[index].headline = e.target.value;
-                      setResult(newResult);
+                      const newResult = [...result]
+                      newResult[index].headline = e.target.value
+                      setResult(newResult)
                     }}
                   />
                   <button
@@ -240,9 +249,9 @@ export default function Home() {
                     placeholder="Enter some text"
                     value={item.cta}
                     onChange={(e) => {
-                      const newResult = [...result];
-                      newResult[index].headline = e.target.value;
-                      setResult(newResult);
+                      const newResult = [...result]
+                      newResult[index].headline = e.target.value
+                      setResult(newResult)
                     }}
                   />
                   <button
@@ -255,12 +264,12 @@ export default function Home() {
               </section>
               <hr className="my-5" />
             </>
-          );
+          )
         })}
       </p>
       <p className="text-center text-gray-500 text-xs">
         &copy;{new Date().getFullYear()} Jd Fiscus. All rights reserved.
       </p>
     </div>
-  );
+  )
 }
