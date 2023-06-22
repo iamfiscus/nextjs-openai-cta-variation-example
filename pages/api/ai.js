@@ -1,11 +1,11 @@
 require('dotenv').config()
 import { OpenAIApi, Configuration } from 'openai'
-import { roles } from '../../utils/prompts'
+import { openai_system } from '../../utils/prompts'
 
 export default async function handler(req, res) {
   const data = JSON.parse(req.body)
   const { apiKey } = data
-  const prompts = roles(data)
+  const prompts = openai_system(data)
 
   try {
     const configuration = new Configuration({

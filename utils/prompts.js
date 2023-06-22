@@ -23,25 +23,57 @@ export function roles(data) {
         Each version should be different from the others.
         They should be different in the headline, body, and call-to-action button text.`,
     },
-    {
-      role: 'system',
-      content: `
-            The expected result is to JSON object quotes escaped, in an array length of ${data.versions}. Result that looks like this:
-            {
-              image_prompt: "people ${data.product}. photography style. no text only images",
-              variations:
-              [{
-                headline: "The \"headline\" of the ad" (string),
-                body: "The body of the ad" (string),
-                cta: "The call-to-action button text" (string)
-              },
-              {
-                headline: "The headline of the ad" (string),
-                body: "The body of the ad" (string),
-                cta: "The call-to-action button text" (string)
-              }]
-            }
-          `,
-    },
   ]
+}
+
+export function openai_system(data) {
+  return roles(data).push({
+    role: 'system',
+    content: `
+          The expected result is to JSON object quotes escaped, in an array length of ${data.versions}. Result that looks like this:
+          {
+            image_prompt: "people ${data.product}. photography style. no text only images",
+            variations:
+            [{
+              headline: "The \"headline\" of the ad" (string),
+              body: "The body of the ad" (string),
+              cta: "The call-to-action button text" (string)
+            },
+            {
+              headline: "The headline of the ad" (string),
+              body: "The body of the ad" (string),
+              cta: "The call-to-action button text" (string)
+            }]
+          }
+        `,
+  });
+}
+
+export function openai_function(data) {
+  return [{
+    name: 'generateImagePrompt', // Name of the function to be called dynamically
+    description: 'get the result of the ad copy',
+    parameters: { 
+      type: 'object',
+      properties: {
+        image_prompt: {
+          type: 'string',
+          description: `people ${data.product}. photography style. no text only images`,
+        },
+        headline: { 
+          type: 'string',
+          description: 'The headline of the ad' 
+        },
+        body: { 
+          type: 'string',
+          description: 'The body of the ad' 
+        },
+        cta: { 
+          type: 'string',
+          description: 'The call-to-action button text'
+        },
+      },
+      required:['image_prompt', 'headline', 'body', 'cta']
+    },
+  }];
 }
