@@ -53,27 +53,56 @@ export function openai_function(data) {
   return [{
     name: 'generateImagePrompt', // Name of the function to be called dynamically
     description: 'get the result of the ad copy',
-    parameters: { 
+    parameters: {
       type: 'object',
       properties: {
         image_prompt: {
           type: 'string',
           description: `people ${data.product}. photography style. no text only images`,
         },
-        headline: { 
+        headline: {
           type: 'string',
-          description: 'The headline of the ad' 
+          description: 'The headline of the ad'
         },
-        body: { 
+        body: {
           type: 'string',
-          description: 'The body of the ad' 
+          description: 'The body of the ad'
         },
-        cta: { 
+        cta: {
           type: 'string',
           description: 'The call-to-action button text'
         },
       },
-      required:['image_prompt', 'headline', 'body', 'cta']
+      required: ['image_prompt', 'headline', 'body', 'cta']
     },
-  }];
+  },
+  {
+    name: "lookupTime",
+    description: "get the current time in a given location",
+    parameters: {
+      type: "object", // specify that the parameter is an object
+      properties: {
+        location: {
+          type: "string", // specify the parameter type as a string
+          description: "The location, e.g. Detroit MI. But it should be written in a timezone name like Eastern Standard Time"
+        }
+      },
+      required: ["location"] // specify that the location parameter is required
+    }
+  },
+  {
+    name: "lookupSports",
+    description: "get the next sports game in a given location",
+    parameters: {
+      type: "object", // specify that the parameter is an object
+      properties: {
+        location: {
+          type: "string", // specify the parameter type as a string
+          description: "The location, e.g. Detroit MI. But it should be written in a timezone name like the Detroit Tigers"
+        }
+      },
+      required: ["location"] // specify that the location parameter is required
+    }
+  }
+  ];
 }
